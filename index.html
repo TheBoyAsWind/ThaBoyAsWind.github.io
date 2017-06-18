@@ -238,20 +238,17 @@
             if (flag == 1 && fist == 1) {
                 if (object.getAttribute('full') == 'false') {
                     object.style.backgroundColor = 'black';
-                    object.setAttribute('color', 'black');
                     object.style.borderRadius = '50%';
+                    object.setAttribute('color', 'black');
                     object.setAttribute('full', 'ture');
-                    black.push(object);
                     flag = 0;
                 }
             }
             else if (flag == 1 && fist == 0) {
                 if (object.getAttribute('full') == 'false') {
-                    object.setAttribute('full', 'ture');
                     object.style.backgroundColor = 'white';
-                    object.setAttribute('color', 'white');
                     object.style.borderRadius = '50%';
-                    white.push(object);
+                    object.setAttribute('color', 'white');
                     flag = 0;
                 }
             }
@@ -284,7 +281,6 @@
                     object.setAttribute('color', 'black');
                     object.style.borderRadius = '50%';
                     object.setAttribute('full', 'ture');
-                    black.push(object);
                     flag = 1;
                 }
             }
@@ -294,7 +290,6 @@
                     object.style.backgroundColor = 'white';
                     object.setAttribute('color', 'white');
                     object.style.borderRadius = '50%';
-                    white.push(object);
                     flag = 1;
                 }
             }
