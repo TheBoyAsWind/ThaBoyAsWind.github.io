@@ -259,7 +259,6 @@
             counts++;
             object.onclick = function () { };
             result(object);
-            console.log("------------");
             console.log("ren" + object.id + "第手" + counts);
             removes(all, object);
             computer();
@@ -522,12 +521,12 @@
                             ob.setAttribute('color', 'black');
                         }
                     }
-                    if (k % 2 != 0) {
-                        console.log(k + "," + id + "进攻分数：" + getScore(ob, 0) + "防守分数：" + getScore(ob, 1));
-                    }
-                    else if (k % 2 == 0) {
-                        console.log(k + "," + id + "进攻分数：" + getScore(ob, 1) + "防守分数：" + getScore(ob, 0));
-                    }
+                    // if (k % 2 != 0) {
+                    //     console.log(k + "," + id + "进攻分数：" + getScore(ob, 0) + "防守分数：" + getScore(ob, 1));
+                    // }
+                    // else if (k % 2 == 0) {
+                    //     console.log(k + "," + id + "进攻分数：" + getScore(ob, 1) + "防守分数：" + getScore(ob, 0));
+                    // }
                     removes(arr, ob);
                     k++;
                     // result(ob);
