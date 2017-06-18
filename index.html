@@ -234,11 +234,10 @@
         }
         // 点击事件
         function onClick(object) {
-            
             if (flag == 1 && fist == 1) {
                 if (object.getAttribute('full') == 'false') {
-                    object.style.backgroundColor = 'black';
                     object.style.borderRadius = '50%';
+                    object.style.backgroundColor = 'black';
                     object.setAttribute('color', 'black');
                     object.setAttribute('full', 'ture');
                     flag = 0;
@@ -246,11 +245,13 @@
             }
             else if (flag == 1 && fist == 0) {
                 if (object.getAttribute('full') == 'false') {
-                    object.style.backgroundColor = 'white';
                     object.style.borderRadius = '50%';
+                    object.style.backgroundColor = 'white';
+                    object.setAttribute('full', 'ture');
                     object.setAttribute('color', 'white');
                     flag = 0;
                 }
+                console.log('aaa')
             }
             Shadow(object);
             counts++;
@@ -260,7 +261,7 @@
             removes(all, object);
             computer();
         }
-
+        
         // 电脑落子
         function computer() {
             var id
@@ -296,7 +297,7 @@
             counts++;
             result(object);
             removes(all, object);
-            forward(object);
+            // forward(object);
             object.onclick = function () { };
         }
 
