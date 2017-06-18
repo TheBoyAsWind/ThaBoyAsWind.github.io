@@ -6,142 +6,562 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="author" content="Mr.L">
-    <title></title>
+    <title>五子棋</title>
     <style>
-        html,body {
-            margin: 0px;
-            padding: 0px;
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(to top, white, skyblue);
-            perspective: 1500px;
-            transform-style: preserve-3d;
-            background-repeat: no-repeat;
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
         }
-        h1 {
-            text-align: center;
-            color: tomato;
+
+        header {
+            width: 850px;
+            height: 50px;
+            background-color: wheat;
+            margin: 0px auto;
+            display: flex;
+            justify-content: center;
         }
 
         section {
-            display: flex;
-            justify-content: center;
-            margin-top: 100px;
-            flex-wrap: wrap;
-            
+            /*position: relative;*/
+            height: 810px;
+            width: 850px;
+            background-color: wheat;
+            margin: -10px auto;
+            padding: 25px;
+            box-sizing: border-box;
         }
-        
-        #fenmian {
-            height: 235px;
-            width: 350px;
-            padding: 20px;
-            background-image: url('http://pic.qiantucdn.com/58pic/26/71/90/44B58PICdaA_1024.jpg!/fw/780/watermark/url/L3dhdGVybWFyay12MS4zLnBuZw==/align/center');
-            background-size: contain;
-            background-repeat: no-repeat;
+
+        div {
+            height: 5px;
+            width: 90px;
             border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid white;
+            line-height: 5px;
+            margin: 5px 10px 0 10px;
+            box-shadow: 0 0 10px black
         }
     </style>
 </head>
 
-<body>
-    <h1>父亲节快乐</h1>
-    <audio src="http://dl.stream.qqmusic.qq.com/C400004TSZYg2HaHQi.m4a?vkey=C4150296E3C29AC344F3990B6E8D1F408B491ADE5612CE959F4A346270473F36455A5CEFD8BFAE0D5C8331EA5A3EB8E03DBB5F1DE66ECD19&guid=5052721891&uin=0&fromtag=66"
-        autoplay loop></audio>
-    <section>
-        <div id="fenmian"></div>
+<body onload="table3()">
+    <header>
+        <div onclick="First(this)" id="hum">挑战者先手</div>
+        <div onclick="First(this)" id="ai">电脑先手</div>
+        <div onclick="agin()" id="agin">重新开始</div>
+    </header>
+
+    <section id="section" style="position:relative">
+
     </section>
     <script>
-        var word = '父爱是座山，比山更伟岸，父爱是条江，比江更宽广，父爱是片海，比海更慷慨，父爱是棵树，比树更大度。  '
-        var photos = ['http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/a3Tm3u*6Ceu7xMrdKgoPVIb0LmiLwJJcuiD9LX6tisg!/r/dGoBAAAAAAAA','http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/6iW03Nyo3ILSx7VxTfZXip2UuuGC1oqToX8jbx8NC2w!/r/dHIAAAAAAAAA','http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/*EWK3HJVbp3bDY3xlWzdr9CT5GZkFEESfgI9yd1lqIg!/r/dHMAAAAAAAAA','http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/A47wD912NZNqH5q7km6kenQh69osgi826IoV.36uB74!/r/dGoBAAAAAAAA','http://bpic.588ku.com/back_pic/00/13/88/315653fd3cc61e4.jpg!ww1200'];
-        var div = document.getElementById('fenmian');
-        div.style.height = window.innerHeight*0.8;
-        div.style.width = window.innerWidth*0.8;
-        var section = document.querySelector('section');
-        var timer = 0;
-        var timer2 = 1 ;
-        var count = 0;
-        var flag = 0;
-        var c,f;
-        var flayImg = document.createElement('div');
-        var p = document.createElement('p');
-        for (var i = 0; i < word.length; i++) { 
-        
-        }
-        function time() {
-            addWord(word.charAt(timer));
-            timer++;
-            if (timer >=word.length) {
-            clearInterval(i);
-            remove();
-            c = setInterval(change,50);
-        }
-        }
-        var i = setInterval(time, 300)
-        function addWord(word){
-           var span= document.createElement('span');
-           span.innerHTML = word;
-           span.style.fontSize = '20px'
-           div.appendChild(span);
-        }
-        function remove(){
-            var spans = document.querySelectorAll('span');
-            for(var i =0;i<spans.length;i++){
-                spans[i].remove();
+        var flag = 0, fist = 0, counts = 0;
+        var black = new Array;
+        var white = new Array;
+        var all = new Array;
+        var isFirst, ided;
+        var maxs = new Array;
+        var wscore, bscore;
+        var table = document.createElement('table');
+        table.style.height = '700px';
+        table.style.width = '700px';
+        table.style.borderCollapse = 'collapse';
+        table.style.zIndex = '999';
+        table.style.position = 'absolute';
+
+        // 选择先手
+        function First(object) {
+            if (object.id == 'hum') {
+                flag = 1, fist = 1;
+                isFirst = 0;
+                object.style.backgroundColor = 'gray';
+                document.getElementById('ai').onclick = function () { };
+            }
+            for (var i = 1; i < 21; i++) {
+                var tr = document.createElement('tr');
+                for (var j = 1; j < 21; j++) {
+                    var td = document.createElement('td');
+                    td.setAttribute('full', 'false');
+                    td.setAttribute('onclick', 'onClick(this)');
+                    jj = j; ii = i;
+                    td.setAttribute('id', addZero(j) + '' + addZero(i));
+                    j = jj; i = ii;
+                    tr.appendChild(td);
+                    all.push(td);
+                }
+                table.appendChild(tr);
+            }
+            document.getElementById('section').appendChild(table);
+            if (object.id == 'ai') {
+                isFirst = 1;
+                document.getElementById('hum').onclick = function () { };
+                object.style.backgroundColor = 'gray';
+                computer();
             }
         }
-        function change(){
-            if(count<5){
-                timer2 -=0.01;
+        // 重新开始
+        function agin() {
+            history.go(0);
+        }
+        // 判断输赢
+        function result(object) {
+            var k = object;
+            var y = Number(object.getAttribute('id').substring(2, 4));
+            var x = Number(object.getAttribute('id').substring(0, 2));
+            // 北 南
+            if (y != 1) {
+                if (Number(results(0, 1, k, object) + results(8, 9, k, object)) >= 4) {
+                    alert(object.getAttribute('color') + 'Win! In' + counts);
+                }
             }
-            if(count==5){
-                flay();
-                flag=1;
-                clearInterval(c);
-                f = setInterval(flaing,10);
-                if(left==400) clearInterval(f)
+            // 东北
+            if (y != 1 || x != 20) {
+                if (Number(results(2, 3, k, object) + results(10, 11, k, object)) >= 4) {
+                    alert(object.getAttribute('color') + 'Win! In' + counts);
+                }
             }
-            div.style.opacity = timer2;
-            if(timer2<=0){
-                if(count<=4){
-                    console.log(count)
-                    div.style.backgroundImage = 'url('+photos[count]+')';
+            // 东 西 
+            if (x != 20) {
+                if (Number(results(4, 5, k, object) + results(12, 13, k, object)) >= 4) {
+                    alert(object.getAttribute('color') + 'Win! In' + counts);
+                }
+            }
+            // 东南
+            if (x != 20 || y != 20) {
+                if (Number(results(6, 7, k, object) + results(14, 15, k, object)) >= 4) {
+                    alert(object.getAttribute('color') + 'Win! In' + counts);
+                }
+            }
+        }
+        // 返回棋子周围八个方向的id
+        function sourand(object) {
+            var y = Number(object.getAttribute('id').substring(2, 4));
+            var x = Number(object.getAttribute('id').substring(0, 2));
+
+            var derections = new Array;
+            // 北
+            derections.push(addZero(x) + '');
+            derections.push(addZero(y - 1) + '');
+
+            // 东北
+
+            derections.push(addZero(x + 1) + '');
+            derections.push(addZero(y - 1) + '');
+
+            // 东
+
+            derections.push(addZero(x + 1) + '');
+            derections.push(addZero(y) + '');
+
+            // 东南
+
+            derections.push(addZero(x + 1) + '');
+            derections.push(addZero(y + 1) + '');
+
+            // 南
+
+            derections.push(addZero(x) + '');
+            derections.push(addZero(y + 1) + '');
+
+            // 西南
+
+            derections.push(addZero(x - 1) + '');
+            derections.push(addZero(y + 1) + '');
+
+            // 西
+
+            derections.push(addZero(x - 1) + '');
+            derections.push(addZero(y) + '');
+
+            // 西北
+
+            derections.push(addZero(x - 1) + '');
+            derections.push(addZero(y - 1) + '');
+
+            return derections;
+        }
+        // 添加0
+        function addZero(i) {
+            i = i > 9 ? i : '0' + i;
+            return i;
+        }
+        // 返回个数
+        function results(x, y, k, object) {
+            var count = 0;
+            var k = object;
+            while (count < 4) {
+                var c = 0;
+                var id = sourand(k)[x] + sourand(k)[y];
+                if (document.getElementById(id) == null) {
+                    return count;
+                }
+                else if (document.getElementById(id).getAttribute('color') != k.getAttribute('color')) {
+                    return count;
+                }
+                else if (document.getElementById(id).getAttribute('color') == k.getAttribute('color')) {
                     count++;
-                    timer2=1;
-                }     
+                    k = document.getElementById(id);
+                }
+                if (count == 4) {
+                    return count;
+                }
             }
         }
-        function flay(){
-            flayImg.style.height = '200px';
-            flayImg.style.width = '200px';
-            flayImg.style.position = 'absolute';
-            flayImg.style.top='0';
-            flayImg.style.left='0';
-            flayImg.style.backgroundImage = 'url(\'http://a3.qpic.cn/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/HxTjHtSjxSuY7nD*DWc7YmEb.hrF*QMwThFuJE5PIcY!/b/dGoBAAAAAAAA&bo=6APoA.gD6AMDCSw!&rf=viewer_4\')'
-            flayImg.style.backgroundSize = '100%'
-            flayImg.style.backgroundRepeat = 'no-repeat'
-            flayImg.style.display = 'none'
-            document.body.appendChild(flayImg);
-        }
-        var left = 0;
-        var top = 0;
-        function flaing(){
-            flayImg.style.display='block';
-            flayImg.style.top=top+'px';
-            flayImg.style.left=left+'px';
-            if(left<(window.innerWidth-200)){
-                top++;
-                left++;
+        function table3() {
+            var table2 = document.createElement('table');
+            table2.style.height = '665px';
+            table2.style.width = '665px';
+            table2.style.borderCollapse = 'collapse';
+            table2.style.position = 'absolute'
+            table2.style.top = '45px';
+            table2.style.left = '45px';
+            table2.style.zIndex = '0'
+            for (var i = 1; i < 20; i++) {
+                var tr = document.createElement('tr');
+                tr.style = 'border:1px solid red';
+                for (var j = 1; j < 20; j++) {
+                    var td = document.createElement('td');
+                    td.style = 'border:1px solid red';
+                    tr.appendChild(td);
+                }
+                table2.appendChild(tr);
             }
-            else{
-                show();
+            document.getElementById('section').appendChild(table2);
+        }
+        // 点击事件
+        function onClick(object) {
+            Shadow(object);
+            if (flag == 1 && fist == 1) {
+                if (object.getAttribute('full') == 'false') {
+                    object.style.backgroundColor = 'black';
+                    object.setAttribute('color', 'black');
+                    object.style.borderRadius = '50%';
+                    object.setAttribute('full', 'ture');
+                    black.push(object);
+                    flag = 0;
+                }
+            }
+            else if (flag == 1 && fist == 0) {
+                if (object.getAttribute('full') == 'false') {
+                    object.setAttribute('full', 'ture');
+                    object.style.backgroundColor = 'white';
+                    object.setAttribute('color', 'white');
+                    object.style.borderRadius = '50%';
+                    white.push(object);
+
+                    flag = 0;
+                }
+            }
+            counts++;
+            object.onclick = function () { };
+            result(object);
+            console.log("------------");
+            console.log("ren" + object.id + "第手" + counts);
+            removes(all, object);
+            computer();
+        }
+
+        // 电脑落子
+        function computer() {
+            var id
+            if (counts == 0) {
+                var x = 10;
+                var y = 10;
+                id = addZero(x) + '' + addZero(y);
+            }
+            if (counts != 0) {
+                id = compute(all);
+            }
+            var object = document.getElementById(id);
+            console.log("diannao" + object.id + "第手" + counts)
+            Shadow(object);
+            if (flag == 0 && fist == 0) {
+                if (object.getAttribute('full') == 'false') {
+                    object.style.backgroundColor = 'black';
+                    object.setAttribute('color', 'black');
+                    object.style.borderRadius = '50%';
+                    object.setAttribute('full', 'ture');
+                    black.push(object);
+                    flag = 1;
+                }
+            }
+            else if (flag == 0 && fist == 1) {
+                if (object.getAttribute('full') == 'false') {
+                    object.setAttribute('full', 'ture');
+                    object.style.backgroundColor = 'white';
+                    object.setAttribute('color', 'white');
+                    object.style.borderRadius = '50%';
+                    white.push(object);
+                    flag = 1;
+                }
+            }
+            counts++;
+            result(object);
+            removes(all, object);
+            forward(object);
+            object.onclick = function () { };
+        }
+
+        // 计算
+        function compute(arrs) {
+            // 遍历未选的点
+            var maxId = arrs[0].id;
+            for (var i = 0; i < arrs.length; i++) {
+                var scoreAll = 0;
+                var count = 0;
+                while (count < 16) {
+                    var k = 0;
+                    var scores = 0;
+                    var x = count > 8 ? (count - 8) : (count + 8);
+                    var id = sourand(arrs[i])[x] + sourand(arrs[i])[x + 1];
+                    while (k < 4) {
+                        var ob = document.getElementById(id);
+                        if (ob != null) {
+                            scores = scores + fiveCount(count, count + 1, ob, 2);
+                            id = sourand(ob)[x] + sourand(ob)[x + 1];
+                            k++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    scoreAll = scoreAll + fiveCount(count, count + 1, arrs[i], 2) + scores;
+                    count = count + 2;
+                }
+                arrs[i].setAttribute('score', scoreAll);
+                maxId = arrs[i].getAttribute('score') >= Number(document.getElementById(maxId).getAttribute('score')) ? arrs[i].id : maxId;
+            }
+            return maxId;
+
+        }
+        // 获得横纵坐标
+        function getIdx(object) {
+            var x = Number(object.getAttribute('id').substring(0, 2));
+            return x;
+        }
+        // 设置光晕
+        function Shadow(object) {
+            if (ided != null) {
+                document.getElementById(ided).style.boxShadow = '0 0 0'
+            }
+            object.style.boxShadow = '0 0 25px 5px orangered';
+            ided = object.id;
+        }
+        function removes(_arr, _obj) {
+            var length = _arr.length;
+            for (var i = 0; i < length; i++) {
+                if (_arr[i] == _obj) {
+                    if (i == 0) {
+                        _arr.shift(); //删除并返回数组的第一个元素
+                        return;
+                    }
+                    else if (i == length - 1) {
+                        _arr.pop();  //删除并返回数组的最后一个元素
+                        return;
+                    }
+                    else {
+                        _arr.splice(i, 1); //删除下标为i的元素
+                        return;
+                    }
+                }
+            }
+        };
+
+        // 计算某空点某个方向的4个点的情况
+        function fiveCount(x, y, object, nu) {
+            var k = object;
+            var count = 0;
+            var blackscore;
+            var whitescore;
+            var color = 'black';
+            var blacknumber = 0;
+            var whitenumber = 0;
+            // 计算黑棋
+            while (count < 4) {
+                var id = sourand(k)[x] + sourand(k)[y];
+                if (document.getElementById(id) == null) {
+                    score = 0;
+                    k = object;
+                    break;
+                }
+                else if (document.getElementById(id).getAttribute('color') == 'white') {
+                    score = 0;
+                    k = object;
+                    break;
+                }
+                else if (document.getElementById(id).getAttribute('color') == color) {
+                    count++;
+                    blacknumber++;
+                    k = document.getElementById(id);
+                }
+                else if (document.getElementById(id).getAttribute('full') == 'false') {
+                    count++;
+                    k = document.getElementById(id);
+                }
+            }
+            // 计算白棋
+            color = 'white';
+            while (count < 4) {
+                var id = sourand(k)[x] + sourand(k)[y];
+                if (document.getElementById(id) == null) {
+                    score = 0;
+                    return 0;
+                }
+                else if (document.getElementById(id).getAttribute('color') == 'black') {
+                    score = 0;
+                    return 0;
+                }
+                else if (document.getElementById(id).getAttribute('color') == color) {
+                    count++;
+                    whitenumber++;
+                    k = document.getElementById(id);
+                }
+                else if (document.getElementById(id).getAttribute('full') == 'false') {
+                    count++;
+                    k = document.getElementById(id);
+                }
+            }
+            if (isFirst == 0) {
+                // 人类先下 ai执白
+                if (blacknumber == 0) blackscore = 1;
+                if (blacknumber == 1) blackscore = 2;
+                if (blacknumber == 2) blackscore = 1200;
+                if (blacknumber == 3) blackscore = 5400;
+                if (blacknumber == 4) blackscore = 80000;
+
+                if (whitenumber == 0) whitescore = 1;
+                if (whitenumber == 1) whitescore = 80;
+                if (whitenumber == 2) whitescore = 1500;
+                if (whitenumber == 3) whitescore = 4500;
+                if (whitenumber == 4) whitescore = 100000;
+
+                if (nu == 2) {
+                    score = blackscore > whitescore ? blackscore : whitescore;
+                }
+                // 防守
+                else if (nu == 0) {
+                    score = blackscore;
+                }
+                // 进攻
+                else if (nu == 1) {
+                    score = whitescore;
+                }
+            }
+            else {
+                // 人类后下 ai执黑
+                if (blacknumber == 0) blackscore = 1;
+                if (blacknumber == 1) blackscore = 80;
+                if (blacknumber == 2) blackscore = 1500;
+                if (blacknumber == 3) blackscore = 4500;
+                if (blacknumber == 4) blackscore = 100000;
+
+                if (whitenumber == 0) whitescore = 1;
+                if (whitenumber == 1) whitescore = 2;
+                if (whitenumber == 2) whitescore = 1200;
+                if (whitenumber == 3) whitescore = 5400;
+                if (whitenumber == 4) whitescore = 80000;
+
+                if (nu == 2) {
+                    score = blackscore > whitescore ? blackscore : whitescore;
+                }
+                else if (nu == 0) {
+                    score = whitescore;
+                }
+                else if (nu == 1) {
+                    score = blackscore;
+                }
+            }
+            return score;
+        }
+
+        function forward(object) {
+            var arr = new Array;
+            for (var i = 0; i < all.length; i++) {
+                arr.push(all[i]);
+            }
+            var id;
+            var ob;
+            var k = 1;
+            var obs = new Array;
+            if (counts > 1) {
+                while (k < 5) {
+                    // 2n-1人类可能下一步结果 2n ai下一步结果
+                    if (k % 2 != 0) {
+                        if (isFirst == 0) {
+                            isFirst = 1;
+                            id = compute(arr);
+                            isFirst = 0;
+                            ob = document.getElementById(id);
+                            obs.push(ob);
+                            ob.setAttribute('full', "ture");
+                            ob.setAttribute('color', 'black');
+                        }
+                        if (isFirst == 1) {
+                            isFirst = 0;
+                            id = compute(arr);
+                            isFirst = 1;
+                            ob = document.getElementById(id);
+                            obs.push(ob);
+                            ob.setAttribute('full', "ture");
+                            ob.setAttribute('color', 'white');
+                        }
+                    }
+                    else {
+                        id = compute(arr);
+                        ob = document.getElementById(id);
+                        obs.push(ob);
+                        ob.setAttribute('full', "ture");
+                        if (isFirst == 0) {
+                            ob.setAttribute('color', 'white');
+                        }
+                        else {
+                            ob.setAttribute('color', 'black');
+                        }
+                    }
+                    if (k % 2 != 0) {
+                        console.log(k + "," + id + "进攻分数：" + getScore(ob, 0) + "防守分数：" + getScore(ob, 1));
+                    }
+                    else if (k % 2 == 0) {
+                        console.log(k + "," + id + "进攻分数：" + getScore(ob, 1) + "防守分数：" + getScore(ob, 0));
+                    }
+                    removes(arr, ob);
+                    k++;
+                    // result(ob);
+                }
+            }
+            for (var i = 0; i < obs.length; i++) {
+                obs[i].setAttribute('full', "false");
+                obs[i].setAttribute('color', "");
             }
         }
-        function show(){
-            p.style.height = '100%'
-            p.style.width = '100%'
-            p.style.padding = '20px';
-            p.innerHTML = '老爸别抽烟，保重身体多锻炼；老爸少喝酒，饭后逛逛百步走；老爸莫烦恼，豁达洒脱精神好；老爸莫劳累，健康开心最珍贵。老爸的教诲像一盏灯，为我照亮前程；老爸的关怀像一把伞，为我遮蔽风雨。今天是父亲节，老爸，祝你节日快乐！'
-            section.appendChild(p);
+        // 获取进攻／防守分数
+        function getScore(object, nu) {
+            var count = 0;
+            var scoreAll = 0;
+            while (count < 16) {
+                var k = 0;
+                var scores = 0;
+                var x = count > 8 ? (count - 8) : (count + 8);
+                var id = sourand(object)[x] + sourand(object)[x + 1];
+                while (k < 4) {
+                    var ob = document.getElementById(id);
+                    if (ob != null) {
+                        scores = scores + fiveCount(count, count + 1, ob, nu);
+                        id = sourand(ob)[x] + sourand(ob)[x + 1];
+                        k++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                scoreAll = scoreAll + fiveCount(count, count + 1, object, nu) + scores;
+                count = count + 2;
+            }
+            return scoreAll;
         }
     </script>
 </body>
