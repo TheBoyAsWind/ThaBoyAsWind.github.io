@@ -234,7 +234,7 @@
         }
         // 点击事件
         function onClick(object) {
-            Shadow(object);
+            
             if (flag == 1 && fist == 1) {
                 if (object.getAttribute('full') == 'false') {
                     object.style.backgroundColor = 'black';
@@ -252,10 +252,10 @@
                     object.setAttribute('color', 'white');
                     object.style.borderRadius = '50%';
                     white.push(object);
-
                     flag = 0;
                 }
             }
+            Shadow(object);
             counts++;
             object.onclick = function () { };
             result(object);
