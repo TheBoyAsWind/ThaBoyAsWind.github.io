@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Mr.L">
+    <title></title>
+    <style>
+        html,body {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to top, white, skyblue);
+            perspective: 1500px;
+            transform-style: preserve-3d;
+            background-repeat: no-repeat;
+        }
+        h1 {
+            text-align: center;
+            color: tomato;
+        }
+
+        section {
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+            flex-wrap: wrap;
+            
+        }
+        
+        #fenmian {
+            height: 235px;
+            width: 350px;
+            padding: 20px;
+            background-image: url('http://pic.qiantucdn.com/58pic/26/71/90/44B58PICdaA_1024.jpg!/fw/780/watermark/url/L3dhdGVybWFyay12MS4zLnBuZw==/align/center');
+            background-size: contain;
+            background-repeat: no-repeat;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>父亲节快乐</h1>
+    <audio src="http://dl.stream.qqmusic.qq.com/C400004TSZYg2HaHQi.m4a?vkey=C4150296E3C29AC344F3990B6E8D1F408B491ADE5612CE959F4A346270473F36455A5CEFD8BFAE0D5C8331EA5A3EB8E03DBB5F1DE66ECD19&guid=5052721891&uin=0&fromtag=66"
+        autoplay loop></audio>
+    <section>
+        <div id="fenmian"></div>
+    </section>
+    <script>
+        var word = '父爱是座山，比山更伟岸，父爱是条江，比江更宽广，父爱是片海，比海更慷慨，父爱是棵树，比树更大度。  '
+        var photos = ['http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/a3Tm3u*6Ceu7xMrdKgoPVIb0LmiLwJJcuiD9LX6tisg!/r/dGoBAAAAAAAA','http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/6iW03Nyo3ILSx7VxTfZXip2UuuGC1oqToX8jbx8NC2w!/r/dHIAAAAAAAAA','http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/*EWK3HJVbp3bDY3xlWzdr9CT5GZkFEESfgI9yd1lqIg!/r/dHMAAAAAAAAA','http://r.photo.store.qq.com/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/A47wD912NZNqH5q7km6kenQh69osgi826IoV.36uB74!/r/dGoBAAAAAAAA','http://bpic.588ku.com/back_pic/00/13/88/315653fd3cc61e4.jpg!ww1200'];
+        var div = document.getElementById('fenmian');
+        div.style.height = window.innerHeight*0.8;
+        div.style.width = window.innerWidth*0.8;
+        var section = document.querySelector('section');
+        var timer = 0;
+        var timer2 = 1 ;
+        var count = 4;
+        var flag = 0;
+        var c,f;
+        var flayImg = document.createElement('div');
+        var p = document.createElement('p');
+        for (var i = 0; i < word.length; i++) { 
+        
+        }
+        function time() {
+            addWord(word.charAt(timer));
+            timer++;
+            if (timer >=word.length) {
+            clearInterval(i);
+            remove();
+            c = setInterval(change,50);
+        }
+        }
+        var i = setInterval(time, 300)
+        function addWord(word){
+           var span= document.createElement('span');
+           span.innerHTML = word;
+           span.style.fontSize = '20px'
+           div.appendChild(span);
+        }
+        function remove(){
+            var spans = document.querySelectorAll('span');
+            for(var i =0;i<spans.length;i++){
+                spans[i].remove();
+            }
+        }
+        function change(){
+            if(count<5){
+                timer2 -=0.01;
+            }
+            if(count==5){
+                flay();
+                flag=1;
+                clearInterval(c);
+                f = setInterval(flaing,10);
+                if(left==400) clearInterval(f)
+            }
+            div.style.opacity = timer2;
+            if(timer2<=0){
+                if(count<=4){
+                    console.log(count)
+                    div.style.backgroundImage = 'url('+photos[count]+')';
+                    count++;
+                    timer2=1;
+                }     
+            }
+        }
+        function flay(){
+            flayImg.style.height = '200px';
+            flayImg.style.width = '200px';
+            flayImg.style.position = 'absolute';
+            flayImg.style.top='0';
+            flayImg.style.left='0';
+            flayImg.style.backgroundImage = 'url(\'http://a3.qpic.cn/psb?/896f8c08-19e9-41d3-8812-cfec6f990ab5/HxTjHtSjxSuY7nD*DWc7YmEb.hrF*QMwThFuJE5PIcY!/b/dGoBAAAAAAAA&bo=6APoA.gD6AMDCSw!&rf=viewer_4\')'
+            flayImg.style.backgroundSize = '100%'
+            flayImg.style.backgroundRepeat = 'no-repeat'
+            flayImg.style.display = 'none'
+            document.body.appendChild(flayImg);
+        }
+        var left = 0;
+        var top = 0;
+        function flaing(){
+            flayImg.style.display='block';
+            flayImg.style.top=top+'px';
+            flayImg.style.left=left+'px';
+            if(left<(window.innerWidth-200)){
+                top++;
+                left++;
+            }
+            else{
+                show();
+            }
+        }
+        function show(){
+            p.style.height = '100%'
+            p.style.width = '100%'
+            p.style.padding = '20px';
+            p.innerHTML = '老爸别抽烟，保重身体多锻炼；老爸少喝酒，饭后逛逛百步走；老爸莫烦恼，豁达洒脱精神好；老爸莫劳累，健康开心最珍贵。老爸的教诲像一盏灯，为我照亮前程；老爸的关怀像一把伞，为我遮蔽风雨。今天是父亲节，老爸，祝你节日快乐！'
+            section.appendChild(p);
+        }
+    </script>
+</body>
+
+</html>
